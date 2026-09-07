@@ -1,0 +1,29 @@
+# aiflow 默认配置
+#
+# 配置优先级（高 -> 低）：
+#   命令行参数 > 环境变量 AIFLOW_* > 本文件 > 内置默认值
+#
+# 查找顺序：AIFLOW_CONFIG 环境变量指定的路径 > ./config/config.yaml > ./config.yaml
+# 建议使用 export AIFLOW_API_KEY 设置密钥，避免把密钥随本文件分发；
+# 也可直接填写下方的 api_key。
+
+# API 密钥（缺省时读取环境变量 AIFLOW_API_KEY）
+api_key: ""
+
+# OpenAI 兼容 API 地址（缺省时读取 AIFLOW_API_BASE）
+base_url: https://api.deepseek.com/v1
+
+# 默认模型名（缺省时读取 AIFLOW_MODEL，也可用 -m 覆盖）
+model: deepseek-chat
+
+# 采样温度，范围通常 0~2（缺省 0.7）
+temperature: 0.7
+
+# 最大输出 token 数，0 表示使用服务端默认
+max_tokens: 0
+
+# 请求超时时间（秒）
+timeout: 120
+
+# 429 / 5xx 时的重试次数
+retries: 2
