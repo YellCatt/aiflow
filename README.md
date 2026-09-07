@@ -173,6 +173,23 @@ stdout 只输出模型回复的纯文本，便于管道、重定向、组合。
 ./scripts/review.sh cmd/aiflow/main.go
 ```
 
+`scripts/swagger-to-psv.sh` 演示"读结构化文件 -> AI 生成 -> shell 清洗校验 -> 落盘"：把 swagger/openapi 描述交给 AI，产出 PipeGo 的 PSV 用例。
+
+```bash
+# 先跑 dry-run，不消耗 token，直接看管道产出
+DRY_RUN=1 ./scripts/swagger-to-psv.sh scripts/testdata/petstore.swagger.json
+
+# 真实调用 AI
+./scripts/swagger-to-psv.sh api.json cases.psv --filter '/pet,/store'
+```
+
+产出格式（`|` 分隔，首行注释）：
+
+```
+id|skip|desc|method|url|headers|json|expected_status|tags
+post_01|0|新增宠物|POST|{{base_url}}/pet|{"Content-Type":"application/json"}|{"name":"旺财"}|201|json,api,pet
+```
+
 ## 项目结构
 
 ```

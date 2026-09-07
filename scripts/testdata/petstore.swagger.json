@@ -1,0 +1,217 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Petstore Demo API",
+    "version": "1.0.0",
+    "description": "用于演示 swagger -> PipeGo PSV 生成的小型样例"
+  },
+  "host": "petstore.example.com",
+  "basePath": "/v1",
+  "schemes": ["https"],
+  "tags": [
+    {"name": "pet", "description": "宠物管理"},
+    {"name": "store", "description": "订单管理"},
+    {"name": "user", "description": "用户管理"}
+  ],
+  "paths": {
+    "/pet": {
+      "post": {
+        "tags": ["pet"],
+        "summary": "新增宠物",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": ["name", "photoUrls"],
+              "properties": {
+                "id": {"type": "integer", "format": "int64"},
+                "name": {"type": "string", "example": "旺财"},
+                "category": {
+                  "type": "object",
+                  "properties": {
+                    "id": {"type": "integer", "format": "int64"},
+                    "name": {"type": "string"}
+                  }
+                },
+                "photoUrls": {"type": "array", "items": {"type": "string"}},
+                "status": {"type": "string", "enum": ["available", "pending", "sold"]},
+                "tags": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {"type": "integer"},
+                      "name": {"type": "string"}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {"description": "创建成功"},
+          "400": {"description": "参数非法"}
+        }
+      },
+      "put": {
+        "tags": ["pet"],
+        "summary": "更新宠物",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": ["name"],
+              "properties": {
+                "id": {"type": "integer", "format": "int64"},
+                "name": {"type": "string"},
+                "status": {"type": "string", "enum": ["available", "pending", "sold"]}
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {"description": "更新成功"},
+          "404": {"description": "宠物不存在"}
+        }
+      }
+    },
+    "/pet/{petId}": {
+      "delete": {
+        "tags": ["pet"],
+        "summary": "删除宠物",
+        "parameters": [
+          {"in": "header", "name": "api_key", "type": "string", "required": false},
+          {"in": "path", "name": "petId", "type": "integer", "required": true}
+        ],
+        "responses": {
+          "204": {"description": "删除成功"},
+          "404": {"description": "宠物不存在"}
+        }
+      }
+    },
+    "/pet/batch": {
+      "post": {
+        "tags": ["pet"],
+        "summary": "批量新增宠物",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {"type": "string"},
+                  "status": {"type": "string"}
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {"description": "批量创建成功"},
+          "400": {"description": "参数非法"}
+        }
+      }
+    },
+    "/store/order": {
+      "post": {
+        "tags": ["store"],
+        "summary": "创建订单",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": ["petId", "quantity"],
+              "properties": {
+                "orderNo": {"type": "string", "example": "ORD202401001"},
+                "petId": {"type": "integer", "format": "int64"},
+                "quantity": {"type": "integer", "minimum": 1},
+                "shipDate": {"type": "string", "format": "date-time"},
+                "remark": {"type": "string"},
+                "complete": {"type": "boolean"}
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {"description": "下单成功"},
+          "400": {"description": "库存不足"}
+        }
+      }
+    },
+    "/user": {
+      "post": {
+        "tags": ["user"],
+        "summary": "创建用户",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": ["username", "email"],
+              "properties": {
+                "username": {"type": "string", "example": "zhangsan"},
+                "email": {"type": "string", "format": "email", "example": "zhangsan@example.com"},
+                "phone": {"type": "string", "example": "13800138000"},
+                "age": {"type": "integer", "minimum": 0},
+                "profile": {
+                  "type": "object",
+                  "properties": {
+                    "nickname": {"type": "string"},
+                    "city": {"type": "string"}
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {"description": "创建成功"},
+          "409": {"description": "用户已存在"}
+        }
+      }
+    },
+    "/user/createWithList": {
+      "post": {
+        "tags": ["user"],
+        "summary": "列表方式批量创建用户",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "username": {"type": "string"},
+                  "email": {"type": "string"}
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {"description": "批量创建成功"},
+          "400": {"description": "参数非法"}
+        }
+      }
+    }
+  }
+}
